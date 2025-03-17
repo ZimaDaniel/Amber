@@ -1,4 +1,6 @@
-﻿namespace Amber.Serialization;
+﻿using System.Reflection.PortableExecutable;
+
+namespace Amber.Serialization;
 
 public interface IDataReader
 {
@@ -26,4 +28,17 @@ public interface IDataReader
     void AlignToWord();
     void AlignToDword();
     byte[] ToArray();
+}
+
+public static class DataReaderExtensions
+{
+    public static int[] ReadWords(this IDataReader reader, int count)
+    {
+        int[] words = new int[count];
+
+        for (int i = 0; i < count; i++)
+            words[i] = reader.ReadWord();
+
+        return words;
+    }
 }
