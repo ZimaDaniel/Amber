@@ -21,7 +21,6 @@
 
 namespace Amber.Renderer.OpenGL.Shaders;
 
-using Amber.Common;
 using Amber.Renderer.OpenGL.Buffers;
 using static Shader;
 

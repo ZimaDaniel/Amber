@@ -13,7 +13,6 @@
     <ProjectReference Include="..\Amber.Assets.Common\Amber.Assets.Common.csproj" />
     <ProjectReference Include="..\Amber.IO.Common\Amber.IO.Common.csproj" />
     <ProjectReference Include="..\Amber.IO.FileFormats\Amber.IO.FileFormats.csproj" />
-    <ProjectReference Include="..\Ambermoon.Data.Legacy\Ambermoon.Data.Legacy.csproj" />
   </ItemGroup>
 
 </Project>
