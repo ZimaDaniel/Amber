@@ -53,7 +53,11 @@ public readonly struct Position : IEquatable<Position>
 		return !(left == right);
 	}
 
-	public override readonly string ToString() => $"({X}, {Y})";
+	public static Position operator +(Position left, Position right) => new(left.X + right.X, left.Y + right.Y);
+
+    public static Position operator -(Position left, Position right) => new(left.X - right.X, left.Y - right.Y);
+
+    public override readonly string ToString() => $"({X}, {Y})";
 }
 
 public readonly struct FloatPosition : IEquatable<FloatPosition>
@@ -109,7 +113,11 @@ public readonly struct FloatPosition : IEquatable<FloatPosition>
 		return !(left == right);
 	}
 
-	public override readonly string ToString() => $"({X:0.00}, {Y:0.00})";
+    public static FloatPosition operator +(FloatPosition left, FloatPosition right) => new(left.X + right.X, left.Y + right.Y);
+
+    public static FloatPosition operator -(FloatPosition left, FloatPosition right) => new(left.X - right.X, left.Y - right.Y);
+
+    public override readonly string ToString() => $"({X:0.00}, {Y:0.00})";
 }
 
 public delegate FloatPosition PositionTransformation(FloatPosition position);
