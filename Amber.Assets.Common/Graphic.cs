@@ -1,4 +1,6 @@
 using Amber.Common;
+using System.Net.Sockets;
+using System;
 
 namespace Amber.Assets.Common;
 
@@ -21,21 +23,50 @@ public class Graphic : IGraphic
 		this.data = new byte[width * height * BytesPerPixel];
 	}
 
-	public Graphic(int width, int height, byte[] data, GraphicFormat graphicFormat)
+	public Graphic(int width, int height, byte[] data, GraphicFormat graphicFormat, int frameCount = 1)
 	{
-		Width = width;
+        Width = frameCount * width;
 		Height = height;
 		Format = graphicFormat;
 		UsesPalette = graphicFormat.UsesPalette();
 		BytesPerPixel = Format.BytesPerPixel();
 
-		if (data.Length != width * height * BytesPerPixel)
+		if (data.Length != frameCount * width * height * BytesPerPixel)
 			throw new AmberException(ExceptionScope.Data, "Unexpected graphic data size.");
 
-		this.data = data;
+		if (frameCount == 1)
+		{
+			this.data = data;
+		}
+		else
+		{
+            // The data contains the frames in vertical succession,
+            // but we want it to extend on the horizontal axis instead.
+            this.data = new byte[data.Length];
+            int frameScanlineSize = width * BytesPerPixel;
+            int frameSize = frameScanlineSize * height;
+            int scanlineSize = frameCount * frameScanlineSize;
+            int offset = 0;
+			var destination = this.data.AsSpan();
+
+			for (int i = 0; i < frameCount; i++)
+			{
+                int destinationOffset = i * frameScanlineSize;
+                var frame = new ReadOnlySpan<byte>(data, offset, frameSize);
+				offset += frameSize;
+				int frameOffset = 0;
+
+                for (int y = 0; y < height; y++)
+				{
+					frame.Slice(frameOffset, frameScanlineSize).CopyTo(destination[destinationOffset..]);
+                    frameOffset += frameScanlineSize;
+					destinationOffset += scanlineSize;
+                }
+			}
+        }
 	}
 
-	private protected static byte[] ReadBitPlanes(int width, int height, byte[] data, int planes, int frameCount = 1)
+    private protected static byte[] ReadBitPlanes(int width, int height, byte[] data, int planes, int frameCount = 1)
 	{
 		if (width <= 8 && planes == 1 && frameCount == 1) // font
 		{
@@ -97,7 +128,7 @@ public class Graphic : IGraphic
 	{
 		var pixelData = ReadBitPlanes(width, height, data, planes, frameCount);
 
-		return new Graphic(frameCount * width, height, pixelData, GraphicFormat.PaletteIndices);
+		return new Graphic(width, height, pixelData, GraphicFormat.PaletteIndices, frameCount);
 	}
 
 	public static Graphic FromAlpha(int width, int height, byte[] data)
