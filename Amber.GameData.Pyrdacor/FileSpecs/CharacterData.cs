@@ -1,6 +1,8 @@
 ﻿using Ambermoon.Data.Legacy.Characters;
 using Amber.GameData.Pyrdacor.Compressions;
 using Ambermoon.Data.Serialization;
+using Amber.Common;
+using Amber.Serialization;
 
 namespace Amber.GameData.Pyrdacor.FileSpecs
 {
@@ -27,13 +29,10 @@ namespace Amber.GameData.Pyrdacor.FileSpecs
         {
             switch (dataReader.PeekByte())
             {
-                case 0: // party member
+                case 0: // character
                     // TODO
                     throw new NotImplementedException();
-                case 1: // NPC
-                    // TODO
-                    throw new NotImplementedException();
-                case 2: // monster
+                case 1: // monster
                     // TODO
                     throw new NotImplementedException();
                 default:
