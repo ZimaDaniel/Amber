@@ -133,7 +133,7 @@ public class DataReader : IDataReader
 
         CheckOutOfRange(length);
         var str = encoding.GetString(data, Position, length);
-        str = str.Replace(encoding.GetString(new byte[] { 0xb4 }), "'");
+        str = str.Replace(encoding.GetString([ 0xb4 ]), "'");
         Position += length;
         return str;
     }
