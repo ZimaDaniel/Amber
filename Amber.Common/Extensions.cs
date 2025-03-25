@@ -24,4 +24,13 @@ public static class Extensions
 
 		return value;
 	}
+
+	public static void SetAllNull<T>(this T?[] collection)
+		where T: notnull
+	{
+        for (int i = 0; i < collection.Length; i++)
+        {
+            collection[i] = default;
+        }
+    }
 }
