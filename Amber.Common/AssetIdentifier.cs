@@ -7,9 +7,11 @@
 		SpellName,
 		SpellSchoolName,
 		ClassName,
+        RaceName,
+        AttributeName,
 		SkillName,
 		CharInfoText, // labels like "APR", "LP", "SP" etc
-		RaceName,
+		LanguageName,
 		ConditionName,
 		ItemTypeName,
 		// Texts
