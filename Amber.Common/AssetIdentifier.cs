@@ -19,6 +19,7 @@
 		ItemText,
 		PuzzleText, // Amberstar assembling texts
 		UIText,
+		Message,
 		// Graphics
 		Layout,
 		UIGraphic,
