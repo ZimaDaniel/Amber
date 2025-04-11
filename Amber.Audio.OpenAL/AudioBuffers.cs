@@ -87,6 +87,18 @@ internal class AudioBuffers(AL al, uint source, int channels, int sampleRate, Ch
         }
     }
 
+    private static async Task WaitAsync(int delay, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await Task.Delay(delay, cancellationToken);
+        }
+        catch (TaskCanceledException)
+        {
+            // ignore
+        }
+    }
+
     async Task PlaybackLoopAsync(CancellationToken cancellationToken)
     {
         await Task.Run(async () =>
@@ -117,7 +129,7 @@ internal class AudioBuffers(AL al, uint source, int channels, int sampleRate, Ch
                         break;
                 }
 
-                await Task.Delay(10, cancellationToken); // Wait for data
+                await WaitAsync(10, cancellationToken); // Wait for data
             }
 
             if (cancellationToken.IsCancellationRequested)
@@ -132,7 +144,7 @@ internal class AudioBuffers(AL al, uint source, int channels, int sampleRate, Ch
                 int buffersProcessed;
                 do
                 {
-                    await Task.Delay(10, cancellationToken);
+                    await WaitAsync(10, cancellationToken);
                     al.GetSourceProperty(source, GetSourceInteger.BuffersProcessed, out buffersProcessed);
                 } while (buffersProcessed == 0 && !cancellationToken.IsCancellationRequested);
 
